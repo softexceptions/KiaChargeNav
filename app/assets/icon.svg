@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Hintergrund -->
+  <rect width="1024" height="1024" rx="220" fill="#0D1117"/>
+
+  <!-- Navigations-Pin (oben) -->
+  <path d="M512 180 C420 180 345 255 345 347 C345 460 512 580 512 580 C512 580 679 460 679 347 C679 255 604 180 512 180Z"
+        fill="#00BCD4" opacity="0.15"/>
+  <path d="M512 200 C431 200 365 266 365 347 C365 449 512 555 512 555 C512 555 659 449 659 347 C659 266 593 200 512 200Z"
+        fill="none" stroke="#00BCD4" stroke-width="18"/>
+  <circle cx="512" cy="347" r="48" fill="#00BCD4"/>
+
+  <!-- Blitz (unten, über Pin) -->
+  <path d="M548 370 L478 510 L520 510 L486 650 L610 480 L562 480 L600 370 Z"
+        fill="#00BCD4"/>
+</svg>

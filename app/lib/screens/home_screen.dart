@@ -85,6 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } on LocationException catch (e) {
       _showError(e.message);
       return;
+    } catch (_) {
+      _showError('GPS-Fehler — bitte erneut versuchen.');
+      return;
     }
 
     Station station;
@@ -120,6 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _cardState = StationCardState.error;
         _errorMessage = e.message;
+      });
+      _scheduleAutoDismiss(const Duration(seconds: 4));
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _cardState = StationCardState.error;
+        _errorMessage = 'Verbindungsfehler — bitte erneut versuchen.';
       });
       _scheduleAutoDismiss(const Duration(seconds: 4));
     }

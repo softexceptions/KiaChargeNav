@@ -28,9 +28,13 @@ class LocationService {
           'Standortberechtigung dauerhaft verweigert — bitte in den App-Einstellungen aktivieren.');
     }
 
-    final pos = await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
-    );
-    return (lat: pos.latitude, lon: pos.longitude, heading: pos.heading);
+    try {
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+      );
+      return (lat: pos.latitude, lon: pos.longitude, heading: pos.heading);
+    } catch (_) {
+      throw const LocationException('GPS-Position konnte nicht ermittelt werden.');
+    }
   }
 }
