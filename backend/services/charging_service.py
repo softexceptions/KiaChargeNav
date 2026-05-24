@@ -86,14 +86,17 @@ def _find_via_goingelectric(
     # Keyword auf exakten GE-Namen mappen
     ge_network = GE_NETWORK_MAP.get(network.lower(), network)
 
-    resp = requests.get(GE_API_URL, params={
-        "key": ge_key,
-        "lat": lat, "lng": lon,
-        "radius": int(radius_km),
-        "networks": ge_network,
-        "orderby": "distance",
-    }, timeout=10)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(GE_API_URL, params={
+            "key": ge_key,
+            "lat": lat, "lng": lon,
+            "radius": int(radius_km),
+            "networks": ge_network,
+            "orderby": "distance",
+        }, timeout=10)
+        resp.raise_for_status()
+    except Exception:
+        return None
     locations = resp.json().get("chargelocations", [])
 
     pool: list[ChargingStation] = []
@@ -135,8 +138,11 @@ def _find_via_ocm(
     if ocm_key:
         params["key"] = ocm_key
 
-    resp = requests.get(OCM_API_URL, params=params, timeout=10)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(OCM_API_URL, params=params, timeout=10)
+        resp.raise_for_status()
+    except Exception:
+        return None
 
     pool: list[ChargingStation] = []
     for poi in resp.json():

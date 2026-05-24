@@ -77,13 +77,16 @@ def find_station(
     if x_api_key != os.environ["API_KEY"]:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
-    station = find_nearest(
-        lat=req.lat,
-        lon=req.lon,
-        heading=req.heading,
-        network=req.network,
-        radius_km=req.radius_km,
-    )
+    try:
+        station = find_nearest(
+            lat=req.lat,
+            lon=req.lon,
+            heading=req.heading,
+            network=req.network,
+            radius_km=req.radius_km,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=f"Ladestation-API nicht erreichbar: {e}")
     if station is None:
         raise HTTPException(
             status_code=404,
