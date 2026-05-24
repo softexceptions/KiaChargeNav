@@ -3,7 +3,7 @@
 # Einmalig auf dem frischen LXC als root ausführen.
 set -euo pipefail
 
-REPO_URL="https://github.com/DEIN_USERNAME/KiaChargeNav.git"  # <-- anpassen
+REPO_URL="https://github.com/softexceptions/KiaChargeNav.git"
 INSTALL_DIR="/opt/kiachargenav"
 SERVICE_USER="kiachargenav"
 
@@ -15,7 +15,7 @@ apt-get install -y --no-install-recommends \
 echo "=== 2/6  Service-User anlegen ==="
 id "$SERVICE_USER" &>/dev/null || useradd --system --no-create-home --shell /usr/sbin/nologin "$SERVICE_USER"
 
-echo "=== 3/6  Repo clonen ==="
+echo "=== 3/6  Repo clonen oder updaten ==="
 if [ -d "$INSTALL_DIR/.git" ]; then
     echo "  Repo vorhanden — git pull"
     git -C "$INSTALL_DIR" pull
@@ -44,10 +44,9 @@ if [ ! -f "$INSTALL_DIR/backend/.env" ]; then
     echo "    GOINGELECTRIC_API_KEY=..."
     echo ""
     echo "  Dann: systemctl start kiachargenav"
-    echo ""
 fi
-chown "$SERVICE_USER:$SERVICE_USER" "$INSTALL_DIR/backend/.env"
-chmod 600 "$INSTALL_DIR/backend/.env"
+chown "$SERVICE_USER:$SERVICE_USER" "$INSTALL_DIR/backend/.env" 2>/dev/null || true
+chmod 600 "$INSTALL_DIR/backend/.env" 2>/dev/null || true
 
 echo "=== 6/6  systemd + nginx konfigurieren ==="
 cp "$INSTALL_DIR/deploy/kiachargenav.service" /etc/systemd/system/kiachargenav.service
@@ -61,7 +60,7 @@ nginx -t && systemctl restart nginx
 
 echo ""
 echo "=== Setup abgeschlossen ==="
-echo "  Nächster Schritt: .env befüllen, dann:"
-echo "    systemctl start kiachargenav"
-echo "    systemctl status kiachargenav"
-echo "    curl http://localhost/health"
+echo "  Nächste Schritte:"
+echo "    1. nano $INSTALL_DIR/backend/.env"
+echo "    2. systemctl start kiachargenav"
+echo "    3. curl http://localhost/health"
