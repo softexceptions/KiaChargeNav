@@ -42,6 +42,9 @@ def send_destination(
     if x_api_key != os.environ["API_KEY"]:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
+    if os.environ.get("DRY_RUN", "false").lower() == "true":
+        return {"status": "sent", "message_id": "dry-run"}
+
     vehicle_id = os.environ["KIA_VEHICLE_ID"]
     vm = get_vm()
     try:
